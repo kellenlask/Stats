@@ -51,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
 					return Calculators.newInstance(position + 1);
 
 				case 1:
-					return MainFragment.newInstance(position + 1);
+					return DataFragment.newInstance(position + 1);
 
 				default:
 					return Summary.newInstance(position + 1);

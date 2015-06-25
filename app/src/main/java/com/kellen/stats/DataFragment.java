@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -18,7 +19,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class MainFragment extends Fragment {
+public class DataFragment extends Fragment {
 //-------------------------------------------
 //
 //		Fields
@@ -42,8 +43,8 @@ public class MainFragment extends Fragment {
 //-------------------------------------------
 	private static final String ARG_SECTION_NUMBER = "section_number";
 
-	public static MainFragment newInstance(int sectionNumber) {
-		MainFragment fragment = new MainFragment();
+	public static DataFragment newInstance(int sectionNumber) {
+		DataFragment fragment = new DataFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
@@ -53,7 +54,7 @@ public class MainFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		rootView = inflater.inflate(R.layout.fragment_data, container, false);
 		return rootView;
 	}
 
@@ -70,7 +71,7 @@ public class MainFragment extends Fragment {
 	}
 
 
-	public MainFragment() {
+	public DataFragment() {
 	}
 
 //-------------------------------------------
@@ -98,6 +99,17 @@ public class MainFragment extends Fragment {
 				}
 			}
 		});
+
+		//On Long-Press: remove item
+		enteredValues.setOnItemLongClickListener((parent, view, position, id) -> {
+            xValues.remove(position);
+            yValues.remove(position);
+
+            storeToSharedPrefs();
+            updateListView();
+
+            return true;
+        });
 
 
 	} //End public void setActionHandlers()
