@@ -87,50 +87,144 @@ public class Calculators extends Fragment {
 	public void setActionHandlers() {
 		//Bayesian Probability
 		bayesButton.setOnClickListener(v -> {
-            //All the necessary fields are filled
-            if(!(pOfA.getText().toString().equals("") || pOfB.getText().toString().equals("") || pOfBGivenA.getText().toString().equals(""))) {
-                double a = Double.parseDouble(pOfA.getText().toString());
-                double b = Double.parseDouble(pOfB.getText().toString());
-                double bGa = Double.parseDouble(pOfBGivenA.getText().toString());
+			try {
+				double[] valueArray = new double[4];
 
-                double aGb = StatisticalMethods.calcBayes(a, bGa, b);
+				if(pOfA.getText().toString().equals("")) { //Solve for P(A)
+					valueArray[3] = Double.parseDouble(pOfAGivenB.getText().toString());
+					valueArray[1] = Double.parseDouble(pOfB.getText().toString());
+					valueArray[2] = Double.parseDouble(pOfBGivenA.getText().toString());
 
-                pOfAGivenB.setText("" + aGb);
+					valueArray = StatisticalMethods.calcBayes(valueArray, 0);
 
-            }
+					pOfA.setText("" + valueArray[0]);
+
+				} else if(pOfB.getText().toString().equals("")) { //Solve for P(B)
+					valueArray[0] = Double.parseDouble(pOfA.getText().toString());
+					valueArray[3] = Double.parseDouble(pOfAGivenB.getText().toString());
+					valueArray[2] = Double.parseDouble(pOfBGivenA.getText().toString());
+
+					valueArray = StatisticalMethods.calcBayes(valueArray, 1);
+
+					pOfB.setText("" + valueArray[1]);
+
+				} else if(pOfBGivenA.getText().toString().equals("")) { //Solve for P(B|A)
+					valueArray[0] = Double.parseDouble(pOfA.getText().toString());
+					valueArray[1] = Double.parseDouble(pOfB.getText().toString());
+					valueArray[3] = Double.parseDouble(pOfAGivenB.getText().toString());
+
+					valueArray = StatisticalMethods.calcBayes(valueArray, 2);
+
+					pOfBGivenA.setText("" + valueArray[2]);
+
+				} else { //Solve for P(A|B)
+					valueArray[0] = Double.parseDouble(pOfA.getText().toString());
+					valueArray[1] = Double.parseDouble(pOfB.getText().toString());
+					valueArray[2] = Double.parseDouble(pOfBGivenA.getText().toString());
+
+					valueArray = StatisticalMethods.calcBayes(valueArray, 3);
+
+					pOfAGivenB.setText("" + valueArray[3]);
+				}
+			} catch (ArithmeticException e) {
+				e.printStackTrace();
+			}
 
         });
 
 		//Poisson Distribution
 		poissonButton.setOnClickListener(v -> {
-            if(!llambdaView.getText().toString().equals("")) {
-                double llambda = Double.parseDouble(llambdaView.getText().toString());
-                double k = Double.parseDouble(kView.getText().toString());
+			try {
+				double[] values = new double[3];
 
-                double probability = StatisticalMethods.calcPoisson(llambda, k);
+				if(llambdaView.getText().toString().equals("")) {
+					values[2] = Double.parseDouble(pOfXEqualK.getText().toString());
+					values[1] = Double.parseDouble(kView.getText().toString());
 
-                pOfXEqualK.setText("" + probability);
+					values = StatisticalMethods.calcPoisson(values, 0);
 
-            }
+					llambdaView.setText("" + values[0]);
+
+				} else if(kView.getText().toString().equals("")) {
+					values[0] = Double.parseDouble(llambdaView.getText().toString());
+					values[2] = Double.parseDouble(pOfXEqualK.getText().toString());
+
+					values = StatisticalMethods.calcPoisson(values, 1);
+
+					kView.setText("" + values[1]);
+
+				} else {
+					values[0] = Double.parseDouble(llambdaView.getText().toString());
+					values[1] = Double.parseDouble(kView.getText().toString());
+
+					values = StatisticalMethods.calcPoisson(values, 2);
+
+					pOfXEqualK.setText("" + values[2]);
+				}
+			} catch (ArithmeticException e) {
+				e.printStackTrace();
+			}
         });
 
 		//t Score
 		tScoreButton.setOnClickListener(v -> {
-            //If all the necessary fields have values
-            if(!(tX.getText().toString().equals("") ||
-                 tMu.getText().toString().equals("") ||
-                 tS.getText().toString().equals("") ||
-                 tN.getText().toString().equals(""))) {
+			try {
+				double[] values = new double[5];
 
-                double x = Double.parseDouble(tX.getText().toString());
-                double mu = Double.parseDouble(tMu.getText().toString());
-                double s = Double.parseDouble(tS.getText().toString());
-                double n = Double.parseDouble(tN.getText().toString());
+				if(tX.getText().toString().equals("")) {
+					values[4] = Double.parseDouble(tT.getText().toString());
+					values[1] = Double.parseDouble(tMu.getText().toString());
+					values[2] = Double.parseDouble(tS.getText().toString());
+					values[3] = Double.parseDouble(tN.getText().toString());
 
-                double t = StatisticalMethods.calcTScore(x, s, mu, n);
+					values = StatisticalMethods.calcTScore(values, 0);
 
-                tT.setText("" + t);
-            }
+					tX.setText("" + values[0]);
+
+				} else if(tMu.getText().toString().equals("")) {
+					values[0] = Double.parseDouble(tX.getText().toString());
+					values[4] = Double.parseDouble(tT.getText().toString());
+					values[2] = Double.parseDouble(tS.getText().toString());
+					values[3] = Double.parseDouble(tN.getText().toString());
+
+					values = StatisticalMethods.calcTScore(values, 1);
+
+					tMu.setText("" + values[1]);
+
+				} else if(tS.getText().toString().equals("")) {
+					values[0] = Double.parseDouble(tX.getText().toString());
+					values[1] = Double.parseDouble(tMu.getText().toString());
+					values[4] = Double.parseDouble(tT.getText().toString());
+					values[3] = Double.parseDouble(tN.getText().toString());
+
+					values = StatisticalMethods.calcTScore(values, 2);
+
+					tS.setText("" + values[2]);
+
+				} else if(tN.getText().toString().equals("")) {
+					values[0] = Double.parseDouble(tX.getText().toString());
+					values[1] = Double.parseDouble(tMu.getText().toString());
+					values[2] = Double.parseDouble(tS.getText().toString());
+					values[4] = Double.parseDouble(tT.getText().toString());
+
+					values = StatisticalMethods.calcTScore(values, 3);
+
+					tN.setText("" + values[3]);
+
+				} else {
+					values[0] = Double.parseDouble(tX.getText().toString());
+					values[1] = Double.parseDouble(tMu.getText().toString());
+					values[2] = Double.parseDouble(tS.getText().toString());
+					values[3] = Double.parseDouble(tN.getText().toString());
+
+					values = StatisticalMethods.calcTScore(values, 4);
+
+					tT.setText("" + values[4]);
+				}
+
+			} catch(ArithmeticException e) {
+				e.printStackTrace();
+			}
         });
 
 

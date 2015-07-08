@@ -24,13 +24,13 @@ public class StatisticalMethods {
 		double[] returnArray = new double[7];
 
 		//mean
-		returnArray[0] = calcMean(values);
+		returnArray[0] = round(calcMean(values));
 
 		//median
-		returnArray[1] = calcMedian(values);
+		returnArray[1] = round(calcMedian(values));
 
 		//range
-		returnArray[2] = calcRange(values);
+		returnArray[2] = round(calcRange(values));
 
 		//min
 		returnArray[3] = findMin(values);
@@ -39,10 +39,10 @@ public class StatisticalMethods {
 		returnArray[4] = findMax(values);
 
 		//variance
-		returnArray[5] = calcVariance(values);
+		returnArray[5] = round(calcVariance(values));
 
 		//standard deviation
-		returnArray[6] = calcStdDev(values);
+		returnArray[6] = round(calcStdDev(values));
 
 		return returnArray;
 
@@ -118,62 +118,7 @@ public class StatisticalMethods {
 
 	} //End public static double findMax(double[])
 
-//-------------------------------------------
-//
-//		Calculators
-//
-//-------------------------------------------
-	//		The Array: {pOfA, pOfB, pOfBGivenA, pOfAGivenB}
-	public static double[] calcBayes(double[] values, int missingValueIndex) {
-		switch(missingValueIndex) {
-			case 0:
-				values[0] = (values[3] * values[1]) / values[2];
-				break;
-
-			case 1:
-				values[1] = (values[0] * values[2]) / values[3];
-				break;
-
-			case 2:
-				values[2] = (values[1] * values[3]) / values[0];
-				break;
-
-			case 3:
-				values[3] = (values[0] * values[2]) / values[1];
-				break;
-
-		} //End Switch
-
-		return values;
-
-	} //End public static double calcBayes(double, double, double)
-
-	public static double calcPoisson(double llambda, double value) {
-		return (Math.pow(llambda, value) * Math.pow(Math.E, -1 * llambda)) / calcFactorial(value);
-
-	} //End public static double calcPoisson(double, double)
-
-	public static double calcPopulationZScore(double x, double mu, double sigma) {
-		return (x - mu) / sigma;
-
-	} //End public static double calcPopulationZScore(double, double, double)
-
-	public static double calcSampleZScore(double x, double mu, double sigma, double n) {
-		return (x - mu) / (sigma / Math.sqrt(n));
-
-	} //End public static double calcSampleZScore(double, double, double, double)
-
-	public static double calcTScore(double x, double s, double mu, double n) {
-		double numerator = x - mu;
-		double denominator = s / Math.sqrt(n);
-
-		return numerator / denominator;
-
-	} //End public static double calcTScore(double, double, double, double)
-
-
-
-//-------------------------------------------
+// -------------------------------------------
 //
 //		Regression
 //
@@ -200,9 +145,9 @@ public class StatisticalMethods {
 
 		} //End for
 
-		double slope = (n * xySum - xSum * ySum) / (n * x2Sum - xSum * xSum);
-		double yInt = (x2Sum * ySum - xSum * xySum) / (n * x2Sum - xSum * xSum);
-		double r = (n * xySum - xSum * ySum) / Math.sqrt((n * x2Sum - xSum * xSum) * (n * y2Sum - ySum * ySum));
+		double slope = round((n * xySum - xSum * ySum) / (n * x2Sum - xSum * xSum));
+		double yInt = round((x2Sum * ySum - xSum * xySum) / (n * x2Sum - xSum * xSum));
+		double r = round((n * xySum - xSum * ySum) / Math.sqrt((n * x2Sum - xSum * xSum) * (n * y2Sum - ySum * ySum)));
 
 		return new double[] {slope, yInt, r, r*r};
 
@@ -253,12 +198,129 @@ public class StatisticalMethods {
 
 	} //End public static double[] powerReg(double[], double[])
 
+//-------------------------------------------
+//
+//		Calculators
+//
+//-------------------------------------------
+	//	The Array: {pOfA, pOfB, pOfBGivenA, pOfAGivenB}
+	public static double[] calcBayes(double[] values, int missingValueIndex) {
+		switch(missingValueIndex) {
+			case 0: //P(A)
+				values[0] = (values[3] * values[1]) / values[2];
+				break;
+
+			case 1: //P(B)
+				values[1] = (values[0] * values[2]) / values[3];
+				break;
+
+			case 2: //P(B|A)
+				values[2] = (values[1] * values[3]) / values[0];
+				break;
+
+			case 3: //P(A|B)
+				values[3] = (values[0] * values[2]) / values[1];
+				break;
+
+		} //End Switch
+
+		return values;
+
+	} //End public static double calcBayes(double, double, double)
+
+	public static double[] calcPoisson(double[] values, int index) {
+		switch(index) {
+			case 0: //llambda
+				double x = values[1];
+				double p = values[2];
+				double w = -1 * (Math.pow((p * calcFactorial(x)), 1/x) / x);
+
+				values[0] = -1 * x * lambertWFunction(w);
+				break;
+
+			case 1: //k
+				//Wow this one is difficult to pull out... TODO: solve for k
+				break;
+
+			default: //P(X=k)
+				values[2] = (Math.pow(values[0], values[1]) * Math.pow(Math.E, -1 * values[0])) / calcFactorial(values[1]);
+				break;
+		}
+
+		return values;
+
+	} //End public static double calcPoisson(double, double)
+
+	//	Array: {x, mu,  sigma, z}
+	public static double[] calcZScore(double[] values, int index) {
+		try {
+			switch(index) {
+				case 0: //solve for x
+					values[0] = (values[3] * values[2]) + values[1];
+					break;
+
+				case 1: //solve for mu
+					values[1] = -1 * values[3] * values[2] + values[0];
+					break;
+
+				case 2: //solve for sigma
+					values[2] = (values[0] - values[1]) / values[3];
+					break;
+
+				default: //solve for z
+					values[3] = (values[0] - values[1]) / values[2];
+					break;
+			}
+		} catch(ArithmeticException e) {
+			e.printStackTrace();
+		}
+
+		return values;
+
+	} //End public static double calcZScore(double, double, double)
+
+	//	Array: {x, mu, sigma, n, t}
+	public static double[] calcTScore(double[] values, int index) {
+		try {
+			switch(index) {
+				case 0: //Solve for x
+					values[0] = values[4] * (values[2] / Math.sqrt(values[3])) + values[1];
+					break;
+
+				case 1: //Solve for mu
+					values[1] = values[0] - values[4] * (values[2] / Math.sqrt(values[3]));
+					break;
+
+				case 2: //Solve for sigma
+					values[2] = ((values[0] - values[1]) * Math.sqrt(values[3])) / values[4];
+					break;
+
+				case 3: //Solve for n
+					values[3] = Math.pow((values[2] * values[4])/(values[0] - values[1]), 2);
+					break;
+
+				default: //solve for t
+					values[4] = (values[0] - values[1]) / (values[2] / Math.sqrt(values[3]));
+					break;
+			}
+		} catch(ArithmeticException e) {
+			e.printStackTrace();
+		}
+
+		return values;
+
+	} //End public static double calcTScore(double, double, double, double)
+
 
 //-------------------------------------------
 //
 //		Misc
 //
 //-------------------------------------------
+	public static double round(double n) {
+		return Math.round(n / SIG_FIGS) * SIG_FIGS;
+	}
+
 	public static double calcFactorial(double n) {
 		if(n == 1) {
 			return 1;
@@ -268,8 +330,8 @@ public class StatisticalMethods {
 
 	} //End public static double calcFactorial(double)
 
+	//Find y for y * e^(y) = w
 	public static double lambertWFunction(double w) {
-		//Find y for y * e^(y) = w
 		double y = 0;
 		double increment = 1.0;
 
@@ -291,6 +353,7 @@ public class StatisticalMethods {
 
 	} //End public static double lambertWFunction(double)
 
+	//Evaluate y*e^y for a given y
 	public static double lambert(double y) {
 		return y * Math.exp(y);
 	}
