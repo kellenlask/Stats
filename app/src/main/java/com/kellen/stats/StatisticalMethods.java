@@ -13,6 +13,8 @@ import java.util.Arrays;
  */
 
 public class StatisticalMethods {
+	public static final double SIG_FIGS = .00001;
+
 //-------------------------------------------
 //
 //		Single Variable Analysis
@@ -121,8 +123,28 @@ public class StatisticalMethods {
 //		Calculators
 //
 //-------------------------------------------
-	public static double calcBayes(double pOfA, double pOfBgivenA, double pOfB) {
-		return (pOfA * pOfBgivenA) / pOfB;
+	//		The Array: {pOfA, pOfB, pOfBGivenA, pOfAGivenB}
+	public static double[] calcBayes(double[] values, int missingValueIndex) {
+		switch(missingValueIndex) {
+			case 0:
+				values[0] = (values[3] * values[1]) / values[2];
+				break;
+
+			case 1:
+				values[1] = (values[0] * values[2]) / values[3];
+				break;
+
+			case 2:
+				values[2] = (values[1] * values[3]) / values[0];
+				break;
+
+			case 3:
+				values[3] = (values[0] * values[2]) / values[1];
+				break;
+
+		} //End Switch
+
+		return values;
 
 	} //End public static double calcBayes(double, double, double)
 
@@ -245,5 +267,32 @@ public class StatisticalMethods {
 		return calcFactorial(n - 1) * n;
 
 	} //End public static double calcFactorial(double)
+
+	public static double lambertWFunction(double w) {
+		//Find y for y * e^(y) = w
+		double y = 0;
+		double increment = 1.0;
+
+		while(increment >= SIG_FIGS) {
+			if(lambert(y - increment) <= w && lambert(y + increment) >= w) {
+				increment /= 10;
+				y = y - increment;
+
+			} else if(lambert(y) < w) {
+				y = y + increment;
+
+			} else {
+				y = y - increment;
+			}
+
+		}
+
+		return y;
+
+	} //End public static double lambertWFunction(double)
+
+	public static double lambert(double y) {
+		return y * Math.exp(y);
+	}
 
 } //End Class

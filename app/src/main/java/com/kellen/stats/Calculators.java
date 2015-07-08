@@ -86,61 +86,52 @@ public class Calculators extends Fragment {
 //-------------------------------------------
 	public void setActionHandlers() {
 		//Bayesian Probability
-		bayesButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//All the necessary fields are filled
-				if(!(pOfA.getText().toString().equals("") || pOfB.getText().toString().equals("") || pOfBGivenA.getText().toString().equals(""))) {
-					double a = Double.parseDouble(pOfA.getText().toString());
-					double b = Double.parseDouble(pOfB.getText().toString());
-					double bGa = Double.parseDouble(pOfBGivenA.getText().toString());
+		bayesButton.setOnClickListener(v -> {
+            //All the necessary fields are filled
+            if(!(pOfA.getText().toString().equals("") || pOfB.getText().toString().equals("") || pOfBGivenA.getText().toString().equals(""))) {
+                double a = Double.parseDouble(pOfA.getText().toString());
+                double b = Double.parseDouble(pOfB.getText().toString());
+                double bGa = Double.parseDouble(pOfBGivenA.getText().toString());
 
-					double aGb = StatisticalMethods.calcBayes(a, bGa, b);
+                double aGb = StatisticalMethods.calcBayes(a, bGa, b);
 
-					pOfAGivenB.setText("" + aGb);
+                pOfAGivenB.setText("" + aGb);
 
-				}
+            }
 
-			}
-		});
+        });
 
 		//Poisson Distribution
-		poissonButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(!llambdaView.getText().toString().equals("")) {
-					double llambda = Double.parseDouble(llambdaView.getText().toString());
-					double k = Double.parseDouble(kView.getText().toString());
+		poissonButton.setOnClickListener(v -> {
+            if(!llambdaView.getText().toString().equals("")) {
+                double llambda = Double.parseDouble(llambdaView.getText().toString());
+                double k = Double.parseDouble(kView.getText().toString());
 
-					double probability = StatisticalMethods.calcPoisson(llambda, k);
+                double probability = StatisticalMethods.calcPoisson(llambda, k);
 
-					pOfXEqualK.setText("" + probability);
+                pOfXEqualK.setText("" + probability);
 
-				}
-			}
-		});
+            }
+        });
 
 		//t Score
-		tScoreButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//If all the necessary fields have values
-				if(!(tX.getText().toString().equals("") ||
-					 tMu.getText().toString().equals("") ||
-					 tS.getText().toString().equals("") ||
-					 tN.getText().toString().equals(""))) {
+		tScoreButton.setOnClickListener(v -> {
+            //If all the necessary fields have values
+            if(!(tX.getText().toString().equals("") ||
+                 tMu.getText().toString().equals("") ||
+                 tS.getText().toString().equals("") ||
+                 tN.getText().toString().equals(""))) {
 
-					double x = Double.parseDouble(tX.getText().toString());
-					double mu = Double.parseDouble(tMu.getText().toString());
-					double s = Double.parseDouble(tS.getText().toString());
-					double n = Double.parseDouble(tN.getText().toString());
+                double x = Double.parseDouble(tX.getText().toString());
+                double mu = Double.parseDouble(tMu.getText().toString());
+                double s = Double.parseDouble(tS.getText().toString());
+                double n = Double.parseDouble(tN.getText().toString());
 
-					double t = StatisticalMethods.calcTScore(x, s, mu, n);
+                double t = StatisticalMethods.calcTScore(x, s, mu, n);
 
-					tT.setText("" + t);
-				}
-			}
-		});
+                tT.setText("" + t);
+            }
+        });
 
 
 	} //End public void setActionHandlers()

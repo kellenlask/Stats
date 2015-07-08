@@ -89,6 +89,22 @@ public class Summary extends Fragment {
 		double[] exp = StatisticalMethods.expReg(xVals, yVals);
 		double[] power = StatisticalMethods.powerReg(xVals, yVals);
 
+		//Round the values to avoid crazy trailing decimals
+		for(int i = 0; i < linear.length; i++) {
+			linear[i] = Math.round(linear[i] * 10000) / 10000;
+			log[i] = Math.round(log[i] * 10000) / 10000;
+			exp[i] = Math.round(exp[i] * 10000) / 10000;
+			power[i] = Math.round(power[i] * 10000) / 10000;
+
+		}
+
+		for(int i = 0; i < xBasic.length; i++) {
+			xBasic[i] = Math.round(xBasic[i] * 10000) / 10000;
+			yBasic[i] = Math.round(yBasic[i] * 10000) / 10000;
+
+		}
+
+
 		//Construct a string for the summary
 		String basic = makeBasicString(xBasic, yBasic);
 		String regression = makeRegressionString(linear, log, exp, power);
