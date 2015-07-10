@@ -1,6 +1,7 @@
 package com.kellen.stats;
 
-import java.lang.Math;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Arrays;
  */
 
 public class StatisticalMethods {
-	public static final double SIG_FIGS = .00001;
+	public static final int SIG_FIGS = 5;
 
 //-------------------------------------------
 //
@@ -192,7 +193,7 @@ public class StatisticalMethods {
 
 		//Adjust the constant value
 		double[] returnArray = linearRegression(newXVals, newYVals);
-		returnArray[1] = Math.exp(returnArray[1]);
+		returnArray[1] = round(Math.exp(returnArray[1]));
 
 		return returnArray;
 
@@ -318,15 +319,14 @@ public class StatisticalMethods {
 //
 //-------------------------------------------
 	public static double round(double n) {
-		return Math.round(n / SIG_FIGS) * SIG_FIGS;
+		BigDecimal bd = new BigDecimal(n);
+		bd = bd.setScale(SIG_FIGS, RoundingMode.HALF_UP);
+		return bd.doubleValue();
+
 	}
 
 	public static double calcFactorial(double n) {
-		if(n == 1) {
-			return 1;
-		}
-
-		if(n <= 0) {
+		if(n <= 1) {
 			return 1;
 		}
 
@@ -338,8 +338,9 @@ public class StatisticalMethods {
 	public static double lambertWFunction(double w) {
 		double y = 0;
 		double increment = 1.0;
+		double sigFigs = 1 / Math.pow(10, SIG_FIGS);
 
-		while(increment >= SIG_FIGS) {
+		while(increment >= sigFigs) {
 			if(lambert(y - increment) <= w && lambert(y + increment) >= w) {
 				increment /= 10;
 				y = y - increment;
@@ -351,7 +352,7 @@ public class StatisticalMethods {
 				y = y - increment;
 			}
 
-		}
+		} //End while
 
 		return y;
 
