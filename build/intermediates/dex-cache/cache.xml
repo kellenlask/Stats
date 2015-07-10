@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="F:\Projects\Stats\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="F:\Projects\Stats\app\build\intermediates\pre-dexed\debug\classes-96f6c29d549b81b9f89bea8965166c894542c4a8.jar" />
+    </item>
+    <item
         jar="F:\Projects\Stats\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\libs\internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -21,13 +28,6 @@
         revision="21.1.2"
         sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
         <dex dex="F:\Projects\Stats\app\build\intermediates\pre-dexed\debug\classes-6f3060afe59b9cddcf238dd0df69a694181b0e6b.jar" />
-    </item>
-    <item
-        jar="F:\Projects\Stats\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\jars\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="F:\Projects\Stats\app\build\intermediates\pre-dexed\debug\classes-96f6c29d549b81b9f89bea8965166c894542c4a8.jar" />
     </item>
 
 </items>

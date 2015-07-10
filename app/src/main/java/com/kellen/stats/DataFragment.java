@@ -101,15 +101,18 @@ public class DataFragment extends Fragment {
 		});
 
 		//On Long-Press: remove item
-		enteredValues.setOnItemLongClickListener((parent, view, position, id) -> {
-            xValues.remove(position);
-            yValues.remove(position);
+		enteredValues.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				xValues.remove(position);
+				yValues.remove(position);
 
-            storeToSharedPrefs();
-            updateListView();
+				DataFragment.this.storeToSharedPrefs();
+				DataFragment.this.updateListView();
 
-            return true;
-        });
+				return true;
+			}
+		});
 
 
 	} //End public void setActionHandlers()
