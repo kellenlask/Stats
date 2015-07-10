@@ -6,32 +6,28 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-
 import java.util.Locale;
 
 
 public class MainActivity extends ActionBarActivity {
 
-	SectionsPagerAdapter mSectionsPagerAdapter;
-
-
-	ViewPager mViewPager;
+	SectionsPagerAdapter sectionsPagerAdapter;
+	ViewPager viewPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+		sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		viewPager.setAdapter(sectionsPagerAdapter);
 
-	}
+	} //End protected void onCreate(Bundle)
 
 
 	/**
@@ -40,8 +36,8 @@ public class MainActivity extends ActionBarActivity {
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-		public SectionsPagerAdapter(FragmentManager fm) {
-			super(fm);
+		public SectionsPagerAdapter(FragmentManager manager) {
+			super(manager);
 		}
 
 		@Override
@@ -56,9 +52,8 @@ public class MainActivity extends ActionBarActivity {
 				default:
 					return Summary.newInstance(position + 1);
 
-			}
-
-		}
+			} //End switch
+		} //End public Fragment getItem(int)
 
 		@Override
 		public int getCount() {
@@ -79,6 +74,6 @@ public class MainActivity extends ActionBarActivity {
 			}
 			return null;
 		}
-	}
+	} //End public class SectionsPagerAdapter extends FragmentPagerAdapter
 
-}
+} //End public class MainActivity extends ActionBarActivity

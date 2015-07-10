@@ -56,8 +56,12 @@ public class Summary extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle bundle) {
 		super.onActivityCreated(bundle);
-		initializeFields();
 
+	}
+	@Override
+	public void onResume() {
+		initializeFields();
+		super.onResume();
 	}
 
 	public Summary() {
@@ -158,7 +162,12 @@ public class Summary extends Fragment {
 
 		summary = (TextView) rootView.findViewById(R.id.analysis);
 
-		performRegressionAnalysis();
+		if (xValues.size() > 0 && yValues.size() > 0) {
+			performRegressionAnalysis();
+
+		} else {
+			summary.setText("No Data.");
+		}
 
 	} //End public void initializeFields()
 

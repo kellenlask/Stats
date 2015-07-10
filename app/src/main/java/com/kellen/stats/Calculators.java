@@ -1,6 +1,10 @@
 package com.kellen.stats;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,8 +20,12 @@ public class Calculators extends Fragment {
 //		Fields
 //
 //-------------------------------------------
-	//GUI elements
+	//UI elements
 	View rootView;
+	SensorManager sensorManager;
+	Sensor accelerometer;
+	ShakeDetector shakeDetector;
+	boolean alertActive;
 
 	//Bayesian Probability
 	Button bayesButton;
@@ -65,7 +73,7 @@ public class Calculators extends Fragment {
 
 //-------------------------------------------
 //
-//		Constructor
+//		Constructors and Such
 //
 //-------------------------------------------
 	@Override
@@ -73,6 +81,20 @@ public class Calculators extends Fragment {
 		super.onActivityCreated(bundle);
 		initializeFields();
 		setActionHandlers();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		// Add the following line to register the Session Manager Listener onResume
+		sensorManager.registerListener(shakeDetector, accelerometer, SensorManager.SENSOR_DELAY_UI);
+	}
+
+	@Override
+	public void onPause() {
+		// Add the following line to unregister the Sensor Manager onPause
+		sensorManager.unregisterListener(shakeDetector);
+		super.onPause();
 	}
 
 	public Calculators() {
@@ -85,6 +107,15 @@ public class Calculators extends Fragment {
 //
 //-------------------------------------------
 	public void setActionHandlers() {
+		//Shake Detection
+		shakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+
+			@Override
+			public void onShake(int count) {
+				showDialog();
+			}
+		});
+
 		//Bayesian Probability
 		bayesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -128,7 +159,7 @@ public class Calculators extends Fragment {
 
 						pOfAGivenB.setText("" + valueArray[3]);
 					}
-				} catch (ArithmeticException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 
@@ -166,7 +197,7 @@ public class Calculators extends Fragment {
 
 						pOfXEqualK.setText("" + values[2]);
 					}
-				} catch (ArithmeticException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -230,7 +261,7 @@ public class Calculators extends Fragment {
 						tT.setText("" + values[4]);
 					}
 
-				} catch (ArithmeticException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -244,6 +275,59 @@ public class Calculators extends Fragment {
 //		GUI Methods
 //
 //-------------------------------------------
+	public void clearTextFields() {
+		//Bayesian
+		pOfA.setText("");
+		pOfB.setText("");
+		pOfAGivenB.setText("");
+		pOfBGivenA.setText("");
+
+		//Poisson
+		llambdaView.setText("");
+		kView.setText("");
+		pOfXEqualK.setText("");
+
+		//t score
+		tX.setText("");
+		tMu.setText("");
+		tN.setText("");
+		tS.setText("");
+		tT.setText("");
+	} //End public void clearTextFields()
+
+	public void showDialog() {
+		if (!alertActive) {
+			alertActive = true;
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+
+			builder.setTitle("Clear All");
+			builder.setMessage("Do you want to clear all fields?");
+
+			builder.setPositiveButton("CLEAR", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					clearTextFields();
+					dialog.dismiss();
+					alertActive = false;
+				}
+
+			});
+
+			builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// Do nothing
+					dialog.dismiss();
+					alertActive = false;
+				}
+			});
+
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+	} //End public void showDialog()
 
 //-------------------------------------------
 //
@@ -251,6 +335,13 @@ public class Calculators extends Fragment {
 //
 //-------------------------------------------
 	public void initializeFields() {
+		alertActive = false;
+
+		//Shake Detection
+		sensorManager = (SensorManager) rootView.getContext().getSystemService(rootView.getContext().SENSOR_SERVICE);
+		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		shakeDetector = new ShakeDetector();
+
 		//Bayesian Probability
 		bayesButton = (Button) rootView.findViewById(R.id.bayesButton);
 		pOfA = (TextView) rootView.findViewById(R.id.pOfA);

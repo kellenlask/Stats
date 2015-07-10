@@ -1,6 +1,10 @@
 package com.kellen.stats;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,6 +29,12 @@ public class DataFragment extends Fragment {
 //		Fields
 //
 //-------------------------------------------
+	//Shake Detection
+	SensorManager sensorManager;
+	Sensor accelerometer;
+	ShakeDetector shakeDetector;
+	boolean alertActive;
+
 	//GUI elements
 	Button addCoordsButton;
 	TextView xValue;
@@ -60,7 +70,7 @@ public class DataFragment extends Fragment {
 
 //-------------------------------------------
 //
-//		Constructor
+//		Constructors and Such
 //
 //-------------------------------------------
 	@Override
@@ -70,6 +80,20 @@ public class DataFragment extends Fragment {
 		setActionHandlers();
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		// Add the following line to register the Session Manager Listener onResume
+		sensorManager.registerListener(shakeDetector, accelerometer, SensorManager.SENSOR_DELAY_UI);
+	}
+
+	@Override
+	public void onPause() {
+		// Add the following line to unregister the Sensor Manager onPause
+		sensorManager.unregisterListener(shakeDetector);
+		storeToSharedPrefs();
+		super.onPause();
+	}
 
 	public DataFragment() {
 	}
@@ -80,6 +104,15 @@ public class DataFragment extends Fragment {
 //
 //-------------------------------------------
 	public void setActionHandlers() {
+		//Shake Detection
+		shakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+
+			@Override
+			public void onShake(int count) {
+				showDialog();
+			}
+		});
+
 		addCoordsButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -93,7 +126,6 @@ public class DataFragment extends Fragment {
 					xValue.setText("");
 					yValue.setText("");
 
-					storeToSharedPrefs();
 					updateListView();
 
 				}
@@ -135,12 +167,61 @@ public class DataFragment extends Fragment {
 
 	} //End public void updateListView()
 
+	public void clear() {
+		xValues.clear();
+		yValues.clear();
+
+		updateListView();
+
+	} //End public void clear()
+
+	public void showDialog() {
+		if (!alertActive) {
+			alertActive = true;
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+
+			builder.setTitle("Clear All");
+			builder.setMessage("Do you want to clear all fields?");
+
+			builder.setPositiveButton("CLEAR", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					clear();
+					dialog.dismiss();
+					alertActive = false;
+				}
+
+			});
+
+			builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// Do nothing
+					dialog.dismiss();
+					alertActive = false;
+				}
+			});
+
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
+	} //End public void showDialog()
+
 //-------------------------------------------
 //
 //		Utility Methods
 //
 //-------------------------------------------
 	public void initializeFields() {
+		alertActive = false;
+
+		//Shake Detection
+		sensorManager = (SensorManager) rootView.getContext().getSystemService(rootView.getContext().SENSOR_SERVICE);
+		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		shakeDetector = new ShakeDetector();
+
 		//Set the GUI Elements
 		addCoordsButton = (Button) rootView.findViewById(R.id.addButton);
 		xValue = (TextView) rootView.findViewById(R.id.xValue);

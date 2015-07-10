@@ -2,32 +2,32 @@
 <items version="2" >
 
     <item
-        jar="F:\Projects\Stats\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\jars\classes.jar"
+        jar="/media/StorageDrive/Projects/Stats/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/jars/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="F:\Projects\Stats\app\build\intermediates\pre-dexed\debug\classes-96f6c29d549b81b9f89bea8965166c894542c4a8.jar" />
+        <dex dex="/media/StorageDrive/Projects/Stats/app/build/intermediates/pre-dexed/debug/classes-24d6df472a44b8bf3d446d0cc9ba3a6f36fbb3b7.jar" />
     </item>
     <item
-        jar="F:\Projects\Stats\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\libs\internal_impl-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="F:\Projects\Stats\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-ed2e3b6303f14af44dd309b89dadb619aca51030.jar" />
-    </item>
-    <item
-        jar="C:\Users\Kellen\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="F:\Projects\Stats\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-8a020941719a2a90b7018d6e3122a37cf680b7a7.jar" />
-    </item>
-    <item
-        jar="F:\Projects\Stats\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\classes.jar"
+        jar="/media/StorageDrive/Projects/Stats/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/jars/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="F:\Projects\Stats\app\build\intermediates\pre-dexed\debug\classes-6f3060afe59b9cddcf238dd0df69a694181b0e6b.jar" />
+        <dex dex="/media/StorageDrive/Projects/Stats/app/build/intermediates/pre-dexed/debug/classes-126a92e45aab1d9a0dfb6ecaa6ee4eb3361ac3fa.jar" />
+    </item>
+    <item
+        jar="/home/kellen/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/media/StorageDrive/Projects/Stats/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-34206da516d4b323746e33690cea5ad1dc1f7203.jar" />
+    </item>
+    <item
+        jar="/media/StorageDrive/Projects/Stats/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/jars/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/media/StorageDrive/Projects/Stats/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-940d48cf2ac830c682bf55b3ba09201193950ca6.jar" />
     </item>
 
 </items>

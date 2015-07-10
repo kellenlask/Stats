@@ -24,5 +24,6 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textView4"
         android:layout_alignParentBottom="true"
-        android:editable="false"/>
+        android:focusable="false"
+        android:longClickable="false"/>
 </RelativeLayout>
