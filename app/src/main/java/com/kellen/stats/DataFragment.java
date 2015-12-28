@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +29,9 @@ public class DataFragment extends Fragment {
 //		Fields
 //
 //-------------------------------------------
+	MainActivity activity;
+	int sectionNumber = 1;
+
 	//Shake Detection
 	SensorManager sensorManager;
 	Sensor accelerometer;
@@ -36,7 +39,7 @@ public class DataFragment extends Fragment {
 	boolean alertActive;
 
 	//GUI elements
-	Button addCoordsButton;
+	ImageButton addCoordsButton;
 	TextView xValue;
 	TextView yValue;
 	ListView enteredValues;
@@ -48,34 +51,27 @@ public class DataFragment extends Fragment {
 
 //-------------------------------------------
 //
-//		System
+//		Initialization and Life Cycle Methods
 //
 //-------------------------------------------
-	private static final String ARG_SECTION_NUMBER = "section_number";
 
-	public static DataFragment newInstance(int sectionNumber) {
+	public static DataFragment newInstance() {
 		DataFragment fragment = new DataFragment();
-		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-		fragment.setArguments(args);
+		fragment.setArguments(new Bundle());
 		return fragment;
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_data, container, false);
+
 		return rootView;
 	}
 
-//-------------------------------------------
-//
-//		Constructors and Such
-//
-//-------------------------------------------
 	@Override
-	public void onActivityCreated(Bundle bundle) {
-		super.onActivityCreated(bundle);
+	public void onStart() {
+		super.onStart();
+
 		initializeFields();
 		setActionHandlers();
 	}
@@ -103,13 +99,16 @@ public class DataFragment extends Fragment {
 //		Action Handlers
 //
 //-------------------------------------------
+
 	public void setActionHandlers() {
 		//Shake Detection
 		shakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
 
 			@Override
 			public void onShake(int count) {
-				showDialog();
+				if(activity.getCurrentPage() == sectionNumber) {
+					showDialog();
+				}
 			}
 		});
 
@@ -154,6 +153,7 @@ public class DataFragment extends Fragment {
 //		GUI Methods
 //
 //-------------------------------------------
+
 	//Update the ListView on the screen to represent the contents of the x and y arrays
 	public void updateListView() {
 		ArrayList<String> listText = new ArrayList<>();
@@ -214,8 +214,10 @@ public class DataFragment extends Fragment {
 //		Utility Methods
 //
 //-------------------------------------------
+
 	public void initializeFields() {
 		alertActive = false;
+		activity = (MainActivity) getActivity();
 
 		//Shake Detection
 		sensorManager = (SensorManager) rootView.getContext().getSystemService(rootView.getContext().SENSOR_SERVICE);
@@ -223,7 +225,7 @@ public class DataFragment extends Fragment {
 		shakeDetector = new ShakeDetector();
 
 		//Set the GUI Elements
-		addCoordsButton = (Button) rootView.findViewById(R.id.addButton);
+		addCoordsButton = (ImageButton) rootView.findViewById(R.id.addButton);
 		xValue = (TextView) rootView.findViewById(R.id.xValue);
 		yValue = (TextView) rootView.findViewById(R.id.yValue);
 		enteredValues = (ListView) rootView.findViewById(R.id.enteredValues);

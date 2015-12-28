@@ -1,16 +1,12 @@
 <resources>
     <string name="app_name">Stats</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="title_section1">Calculators</string>
+    <string name="title_section2">Data Entry</string>
+    <string name="title_section3">Data Summary</string>
 
     <string name="action_settings">Settings</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="statisticalAnalysis">Statistical Analysis</string>
     <string name="calculators">Calculators</string>
     <string name="bayesLaw">Bayes\' Law</string>
@@ -24,4 +20,5 @@
     <string name="tScore">t-Score</string>
     <string name="singleTail">Single Tail</string>
     <string name="zScore">z-Score</string>
+    <string name="plus">+</string>
 </resources>

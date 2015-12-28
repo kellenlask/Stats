@@ -18,6 +18,7 @@ public class Summary extends Fragment {
 //		Fields
 //
 //-------------------------------------------
+
 	//GUI elements
 	View rootView;
 	TextView summary;
@@ -28,31 +29,23 @@ public class Summary extends Fragment {
 
 //-------------------------------------------
 //
-//		System
+//		Initialization and Life Cycle Methods
 //
 //-------------------------------------------
-	private static final String ARG_SECTION_NUMBER = "section_number";
 
-	public static Summary newInstance(int sectionNumber) {
+	public static Summary newInstance() {
 		Summary fragment = new Summary();
 		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_summary, container, false);
 		return rootView;
 	}
 
-//-------------------------------------------
-//
-//		Constructor
-//
-//-------------------------------------------
 	@Override
 	public void onActivityCreated(Bundle bundle) {
 		super.onActivityCreated(bundle);
@@ -73,6 +66,7 @@ public class Summary extends Fragment {
 //		Regression Analysis
 //
 //-------------------------------------------
+
 	public void performRegressionAnalysis() {
 		//Convert to arrays
 		double[] xVals = new double[xValues.size()];
@@ -88,10 +82,17 @@ public class Summary extends Fragment {
 		double[] yBasic = StatisticalMethods.getBasicAnalysis(yVals);
 
 		//Perform Regression Analysis
-		double[] linear = StatisticalMethods.linearRegression(xVals, yVals);
-		double[] log = StatisticalMethods.logReg(xVals, yVals);
-		double[] exp = StatisticalMethods.expReg(xVals, yVals);
-		double[] power = StatisticalMethods.powerReg(xVals, yVals);
+		double[] linear = new double[0];
+		double[] log = new double[0];
+		double[] exp = new double[0];
+		double[] power = new double[0];
+
+		if(xVals.length > 1) {
+			linear = StatisticalMethods.linearRegression(xVals, yVals);
+			log = StatisticalMethods.logReg(xVals, yVals);
+			exp = StatisticalMethods.expReg(xVals, yVals);
+			power = StatisticalMethods.powerReg(xVals, yVals);
+		}
 
 		//Construct a string for the summary
 		String basic = makeBasicString(xBasic, yBasic);
@@ -131,21 +132,26 @@ public class Summary extends Fragment {
 	public String makeRegressionString(double[] linear, double[] log, double[] exp, double[] power) {
 		String returnString = "Regression Analysis:\n=======================\n";
 
-		//Linear
-		returnString += "Linear Regression:\n\ty=" + linear[0] + "x + (" + linear[1] + ")\n\t";
-		returnString += "r: " + linear[2] + "\n\tr²: " + linear[3] + "\n\n";
+		// If there was enough data to perform regression analysis
+		if (linear.length > 0) {
+			//Linear
+			returnString += "Linear Regression:\n\ty=" + linear[0] + "x + (" + linear[1] + ")\n\t";
+			returnString += "r: " + linear[2] + "\n\tr²: " + linear[3] + "\n\n";
 
-		//Log
-		returnString += "Logarithmic Regression:\n\ty=ln(" + log[0] + "x + (" + log[1] + "))\n\t";
-		returnString += "r: " + log[2] + "\n\tr²: " + log[3] + "\n\n";
+			//Log
+			returnString += "Logarithmic Regression:\n\ty=ln(" + log[0] + "x + (" + log[1] + "))\n\t";
+			returnString += "r: " + log[2] + "\n\tr²: " + log[3] + "\n\n";
 
-		//Exp
-		returnString += "Exponential Regression:\n\ty=e ^ (" + exp[0] + "x + (" + exp[1] + "))\n\t";
-		returnString += "r: " + exp[2] + "\n\tr²: " + exp[3] + "\n\n";
+			//Exp
+			returnString += "Exponential Regression:\n\ty=e ^ (" + exp[0] + "x + (" + exp[1] + "))\n\t";
+			returnString += "r: " + exp[2] + "\n\tr²: " + exp[3] + "\n\n";
 
-		//Power
-		returnString += "Power Regression:\n\ty=" + power[0] + "x ^ (" + power[1] + ")\n\t";
-		returnString += "r: " + power[2] + "\n\tr²: " + power[3] + "\n\n";
+			//Power
+			returnString += "Power Regression:\n\ty=" + power[0] + "x ^ (" + power[1] + ")\n\t";
+			returnString += "r: " + power[2] + "\n\tr²: " + power[3] + "\n\n";
+		} else {
+			returnString += "Not Enough Data.";
+		}
 
 		return returnString;
 
@@ -157,6 +163,7 @@ public class Summary extends Fragment {
 //		Utility Methods
 //
 //-------------------------------------------
+
 	public void initializeFields() {
 		pullFromSharedPrefs();
 

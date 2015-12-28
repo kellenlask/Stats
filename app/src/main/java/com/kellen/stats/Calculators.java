@@ -20,7 +20,11 @@ public class Calculators extends Fragment {
 //		Fields
 //
 //-------------------------------------------
+
 	//UI elements
+	MainActivity activity;
+	int sectionNumber = 0;
+
 	View rootView;
 	SensorManager sensorManager;
 	Sensor accelerometer;
@@ -36,7 +40,7 @@ public class Calculators extends Fragment {
 
 	//Poisson Distribution
 	Button poissonButton;
-	TextView llambdaView;
+	TextView lambdaView;
 	TextView kView;
 	TextView pOfXEqualK;
 
@@ -51,34 +55,30 @@ public class Calculators extends Fragment {
 
 //-------------------------------------------
 //
-//		System
+//		Initialization and Life Cycle Methods
 //
 //-------------------------------------------
-	private static final String ARG_SECTION_NUMBER = "section_number";
 
-	public static Calculators newInstance(int sectionNumber) {
+	public static Calculators newInstance() {
 		Calculators fragment = new Calculators();
 		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_calculators, container, false);
+
+		//sectionNumber = savedInstanceState.getInt(ARG_SECTION_NUMBER);
+
 		return rootView;
 	}
 
-//-------------------------------------------
-//
-//		Constructors and Such
-//
-//-------------------------------------------
 	@Override
-	public void onActivityCreated(Bundle bundle) {
-		super.onActivityCreated(bundle);
+	public void onStart() {
+		super.onStart();
+
 		initializeFields();
 		setActionHandlers();
 	}
@@ -86,13 +86,13 @@ public class Calculators extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		// Add the following line to register the Session Manager Listener onResume
+		// Register the Session Manager Listener onResume
 		sensorManager.registerListener(shakeDetector, accelerometer, SensorManager.SENSOR_DELAY_UI);
 	}
 
 	@Override
 	public void onPause() {
-		// Add the following line to unregister the Sensor Manager onPause
+		// Unregister the Sensor Manager onPause
 		sensorManager.unregisterListener(shakeDetector);
 		super.onPause();
 	}
@@ -106,13 +106,16 @@ public class Calculators extends Fragment {
 //		Action Handlers
 //
 //-------------------------------------------
+
 	public void setActionHandlers() {
 		//Shake Detection
 		shakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
 
 			@Override
 			public void onShake(int count) {
-				showDialog();
+				if(activity.getCurrentPage() == sectionNumber) {
+					showDialog();
+				}
 			}
 		});
 
@@ -173,16 +176,16 @@ public class Calculators extends Fragment {
 				try {
 					double[] values = new double[3];
 
-					if (llambdaView.getText().toString().equals("")) {
+					if (lambdaView.getText().toString().equals("")) {
 						values[2] = Double.parseDouble(pOfXEqualK.getText().toString());
 						values[1] = Double.parseDouble(kView.getText().toString());
 
 						values = StatisticalMethods.calcPoisson(values, 0);
 
-						llambdaView.setText("" + values[0]);
+						lambdaView.setText("" + values[0]);
 
 					} else if (kView.getText().toString().equals("")) {
-						values[0] = Double.parseDouble(llambdaView.getText().toString());
+						values[0] = Double.parseDouble(lambdaView.getText().toString());
 						values[2] = Double.parseDouble(pOfXEqualK.getText().toString());
 
 						values = StatisticalMethods.calcPoisson(values, 1);
@@ -190,7 +193,7 @@ public class Calculators extends Fragment {
 						kView.setText("" + values[1]);
 
 					} else {
-						values[0] = Double.parseDouble(llambdaView.getText().toString());
+						values[0] = Double.parseDouble(lambdaView.getText().toString());
 						values[1] = Double.parseDouble(kView.getText().toString());
 
 						values = StatisticalMethods.calcPoisson(values, 2);
@@ -275,6 +278,7 @@ public class Calculators extends Fragment {
 //		GUI Methods
 //
 //-------------------------------------------
+
 	public void clearTextFields() {
 		//Bayesian
 		pOfA.setText("");
@@ -283,7 +287,7 @@ public class Calculators extends Fragment {
 		pOfBGivenA.setText("");
 
 		//Poisson
-		llambdaView.setText("");
+		lambdaView.setText("");
 		kView.setText("");
 		pOfXEqualK.setText("");
 
@@ -334,8 +338,10 @@ public class Calculators extends Fragment {
 //		Utility Methods
 //
 //-------------------------------------------
+
 	public void initializeFields() {
 		alertActive = false;
+		activity = (MainActivity) getActivity();
 
 		//Shake Detection
 		sensorManager = (SensorManager) rootView.getContext().getSystemService(rootView.getContext().SENSOR_SERVICE);
@@ -351,7 +357,7 @@ public class Calculators extends Fragment {
 
 		//Poisson Distribution
 		poissonButton = (Button) rootView.findViewById(R.id.poissonButton);
-		llambdaView = (TextView) rootView.findViewById(R.id.llambda);
+		lambdaView = (TextView) rootView.findViewById(R.id.llambda);
 		kView = (TextView) rootView.findViewById(R.id.k);
 		pOfXEqualK = (TextView) rootView.findViewById(R.id.pOfXEqualK);
 

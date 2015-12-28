@@ -21,6 +21,7 @@ public class StatisticalMethods {
 //		Single Variable Analysis
 //
 //-------------------------------------------
+
 	public static double[] getBasicAnalysis(double[] values) {
 		double[] returnArray = new double[7];
 
@@ -124,6 +125,7 @@ public class StatisticalMethods {
 //		Regression
 //
 //-------------------------------------------
+
 	//Standard Linear Least Squares Regression
 	public static double[] linearRegression(double[] xVals, double[] yVals) {
 		//Grab some values
@@ -204,6 +206,7 @@ public class StatisticalMethods {
 //		Calculators
 //
 //-------------------------------------------
+
 	//	The Array: {pOfA, pOfB, pOfBGivenA, pOfAGivenB}
 	public static double[] calcBayes(double[] values, int missingValueIndex) {
 		switch(missingValueIndex) {
@@ -318,10 +321,15 @@ public class StatisticalMethods {
 //		Misc
 //
 //-------------------------------------------
+
 	public static double round(double n) {
-		BigDecimal bd = new BigDecimal(n);
-		bd = bd.setScale(SIG_FIGS, RoundingMode.HALF_UP);
-		return bd.doubleValue();
+		try {
+			BigDecimal bd = new BigDecimal(n);
+			bd = bd.setScale(SIG_FIGS, RoundingMode.HALF_UP);
+			return bd.doubleValue();
+		} catch(Exception ex) {
+			return 1;
+		}
 
 	}
 

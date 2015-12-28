@@ -12,18 +12,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/enteredValues"
+
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/tableLayout"/>
+        android:layout_below="@+id/tableLayout"
+        android:smoothScrollbar="true"/>
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:id="@+id/tableLayout">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,11 +68,18 @@
                 android:text=")"
                 android:id="@+id/textView3"/>
 
-            <Button
-                android:layout_width="wrap_content"
+            <ImageButton
+                android:src="@drawable/plus_icon"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="+"
-                android:id="@+id/addButton"/>
+                android:scaleType="fitEnd"
+                android:id="@+id/addButton"
+                android:background="#00000000"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/plus"
+                android:layout_gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingTop="2dp"/>
         </TableRow>
 
     </TableLayout>

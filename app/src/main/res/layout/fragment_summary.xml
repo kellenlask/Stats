@@ -4,26 +4,12 @@
              android:layout_height="match_parent"
              tools:context=".Summary">
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/statisticalAnalysis"
-        android:id="@+id/textView4"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"/>
-
     <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/analysis"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentBottom="true"
         android:focusable="false"
         android:longClickable="false"/>
 </RelativeLayout>
