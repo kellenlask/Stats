@@ -318,19 +318,63 @@ public class StatisticalMethods {
 
 //-------------------------------------------
 //
+//		Basic Probabilistic Manipulations with Iterations
+//
+//-------------------------------------------
+	// n = number of iterations
+	// p(E) = per iteration probability of event
+	// P(E) = probability of event over n iterations
+
+	// P(E) = 1 - (1 - p(E))^n
+	public static double probabilityOfEventOverIterations(double eventProb, double iterations) {
+		double q = 1 - eventProb;
+		return 1 - Math.pow(q, iterations);
+	}
+
+
+	// ( log(1 - P(E)) ) / ( log(1 - p(E)) ) = n
+	public static double iterationsToReachProbability(double eventProb, double iterativeProb) {
+		double bigQ = 1 - iterativeProb;
+		double littleQ = 1 - eventProb;
+
+		double numerator = Math.log(bigQ);
+		double denominator = Math.log(littleQ);
+
+		return numerator / denominator;
+	}
+
+
+	// 1 - nth_root( 1 - P(E) ) = p(E)
+	public static double probabilityOfEventGivenIterations(double iterativeProb, double iterations) {
+		double q = 1 - iterativeProb;
+		double root = Math.pow(q, 1 / iterations);
+
+		return 1 - root;
+	}
+
+
+
+//-------------------------------------------
+//
 //		Misc
 //
 //-------------------------------------------
 
-	public static double round(double n) {
+
+	public static double round(double n, int places) {
 		try {
 			BigDecimal bd = new BigDecimal(n);
-			bd = bd.setScale(SIG_FIGS, RoundingMode.HALF_UP);
+			bd = bd.setScale(places, RoundingMode.HALF_UP);
 			return bd.doubleValue();
+
 		} catch(Exception ex) {
 			return 1;
 		}
+	}
 
+
+	public static double round(double n) {
+		return round(n, SIG_FIGS);
 	}
 
 	public static double calcFactorial(double n) {
